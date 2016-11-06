@@ -110,6 +110,7 @@ int main(int argc, char **argv)
 	return 0;
 
 }
+
 //die willkommensnachricht die beim Start ausgegeben wird
 void welcome(){
 	printf("######HAWSH######\n");
