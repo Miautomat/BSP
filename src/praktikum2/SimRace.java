@@ -13,11 +13,8 @@ public class SimRace {
 	ThreadGroup wagenGruppe = new ThreadGroup("WagenGruppe");
 	int rundenZahl=10;
 	
-	
-	
-	
 	public SimRace() {
-		
+		// Initialisierung aller Wägen
 		Car wagen1 = new Car("Wagen 1", rundenZahl, wagenGruppe);
 		Car wagen2 = new Car("Wagen 2", rundenZahl, wagenGruppe);
 		Car wagen3 = new Car("Wagen 3", rundenZahl, wagenGruppe);

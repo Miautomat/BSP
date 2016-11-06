@@ -6,45 +6,34 @@ import java.util.Random;
 public class Accident extends Thread {
 	
 	private int millisToDeath;
-	ArrayList<Car> alleAutos;
-	boolean stopMe = false;
+	private ArrayList<Car> allCars;
+	private boolean stopMe = false;
 	
-	public Accident(ArrayList<Car> autoliste) {
-
-		
+	public Accident(ArrayList<Car> carList) {
 		millisToDeath= new Random().nextInt(2000);
-		
 		
 		while(millisToDeath<0){
 			millisToDeath= new Random().nextInt();
-			
 		}
-		
-		
-		alleAutos=autoliste;
-		
+		allCars = carList;
 	}
 	
 	@Override
 	public void run() {
-		
 		super.run();
 		
 		while(!interrupted()){
-			
 			try {
-				
 				sleep(millisToDeath);
-				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			for(Car elem : alleAutos){
-//				elem.interrupt();
-				
-			}
+			// wozu diese for Schleife wenn sie nciht genutzt wird???
+//			for(Car elem : allCars){
+//			elem.interrupt();
+//			}
 			
 			interrupt();
 			
@@ -57,10 +46,6 @@ public class Accident extends Thread {
 //				e.printStackTrace();
 //			}
 			
-			
-			
-			
-			
 			Thread.currentThread().stop();
 			Thread.currentThread().stop();
 			Thread.currentThread().stop();
@@ -72,14 +57,12 @@ public class Accident extends Thread {
 //				e.printStackTrace();
 //			}
 //			return;
-			
-		}
-		
-		
-		
+		}	
 	}
+	
+	// stopMe ist immer false hier???
 	private void stopMyself(){
-		stopMe=false;
+		stopMe = false;
 	}
 
 }
