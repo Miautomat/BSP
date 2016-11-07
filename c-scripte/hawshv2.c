@@ -21,7 +21,6 @@
  * 
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,7 +29,7 @@
 
 
 //variablen
-double version = 0.5;
+double version = 1.5;
 char hostname[10];
 char *username;
 char pfad[1024];
@@ -52,8 +51,6 @@ int endsWith(char string[], char zeichen);
 void executeCommand(char string[]);
 void statusline();
 
-
-
 int main(int argc, char **argv)
 {
 	//die willkommensnachricht
@@ -61,10 +58,7 @@ int main(int argc, char **argv)
 	callVersion();
 	
 	printf("\n");
-	
 	char c[] = "\0";
-	
-	
 	
 	//die Hauptschleife die das Programm ausführt
 	while (schleifeBeenden){
@@ -72,43 +66,33 @@ int main(int argc, char **argv)
 		//der aktuelle Pfad wird ermittelt
 		getWorkingPath();
 		
-		
 		c[0] = 0;
 		
 		//ist die zeile indem der username und der pad steht
 		statusline();
 		
-		//es wird dei Befehl eingelesen
+		//es wird der Befehl eingelesen
 		fgets(c, 30, stdin);
 		
 		//das enterzeichen wird abgeschnitten
 		c[strlen(c)-1] = 0;
 		
-		
 		//es wird die Eingabe abgefragt und zuerst
 		//geprüft ob es build-in Befehle sind. Wenn nicht,
 		//wird der Befehl an das System weitergegeben
 		if(stringCompare(c, "quit")){
-				
 			return 112;
-			
 		}else if (stringCompare(c, "version")){
-			
 			callVersion();
 		}else if (stringCompare(c, "help")){
 			getHelp();
 		}else if(startsWith(c, '/')){
-			
 			chdir(c);
-			
 		}else if(strlen(c)>=1){
-			
 			executeCommand(c);
 		}
-		
 	}
 	return 0;
-
 }
 
 //die willkommensnachricht die beim Start ausgegeben wird
@@ -118,18 +102,18 @@ void welcome(){
 	gethostname(hostname, sizeof(hostname));
 	username = getenv("USER");
 	getWorkingPath();
-	
 }
+
 //gibt den aktuellen arbeitspfad zurück (current working path)
 void getWorkingPath(){
-	getcwd(pfad, sizeof(pfad));
-		
-	
+	getcwd(pfad, sizeof(pfad));	
 }
+
 //der Monolog "Version" 
 void callVersion(){
 		printf("HAW-Shell Version %.2f Autor: Patrick Hoeling, Mieke Narjes\n", version);
 }
+
 //vergleicht 2 Strings inhaltlich miteinander
 //wenn sie gleich sind, wird 1 zurück gegeben, wenn nicht, 0
 int stringCompare(char s1[], char s2[]){
@@ -143,8 +127,6 @@ int stringCompare(char s1[], char s2[]){
 		if(s1[i]!=s2[i]){
 				return 0;
 		}
-		
-		
 		i=i+1;
 	}
 	}else{
@@ -170,9 +152,9 @@ int startsWith(char string[], char zeichen){
 	if(string[0]==zeichen){
 		return 1;
 	}
-	return 0;
-
+		return 0;
 }
+
 //prüft ob ein string mit einem bestimmten Zeichen endet
 int endsWith(char string[], char zeichen){
 
@@ -181,11 +163,10 @@ int endsWith(char string[], char zeichen){
 	if(string[letztesZeichen]==zeichen){
 	
 	return 1;
-	
 	}
 return 0;
-	
 }
+
 //wenn der eingegebene String keinem built-in Befehl entspricht,
 //wird der Befehl an die Shell übergeben
 //mit der Option das der neue Prozess im Hintergrund laufen kann
@@ -206,11 +187,10 @@ void executeCommand(char string[]){
 			
 			case 0: //hier arbeitet der kindporozess
 			
-				schleifeBeenden=0;
+				schleifeBeenden = 0;
+				printf("\n"); // neue Zeile
 				
-				printf("\n");
-				
-				execlp(string,string,NULL);
+				execlp(string,string,NULL); // ersetzt momentanen Prozess mit neuem Input hier string (Parameter)
 			break;
 			
 			default: //hier arbeitet der elternprozess
@@ -224,17 +204,11 @@ void executeCommand(char string[]){
 			break;
 			
 	
-	}
-	
-	
-	
-	
-		
+	}	
 }
+
 //gibt die Statusline aus
 void statusline(){
-
 	printf("%s%s: %s%s?>%s", blau, username, gruen, pfad, neutral);
-
 }
 

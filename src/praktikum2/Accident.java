@@ -46,9 +46,13 @@ public class Accident extends Thread {
 //				e.printStackTrace();
 //			}
 			
-			Thread.currentThread().stop();
-			Thread.currentThread().stop();
-			Thread.currentThread().stop();
+//			Thread.currentThread().stop();
+//			Thread.currentThread().stop();
+//			Thread.currentThread().stop();
+			Thread.currentThread().interrupt();
+			Thread.currentThread().interrupt();
+			Thread.currentThread().interrupt();
+			
 			stopMyself();
 //			try {
 //				this.join();

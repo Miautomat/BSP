@@ -11,11 +11,13 @@ import java.util.Comparator;
  */
 public class SimRace {
 	ArrayList<Car> carList;
+	public final int roundNr;
 
 	/**
 	 * Constructor initializes all necessary variables and starts the race
 	 */
 	public SimRace(int quantity, int rounds) {
+		roundNr = rounds;
 		carList = new ArrayList<>();
 		this.createCars(quantity, rounds);
 		this.race();
@@ -25,7 +27,7 @@ public class SimRace {
 	 * starts the race itself and runs the evaluation
 	 */
 	public void race() {
-		Accident accident = new Accident();
+		Accident accident = new Accident(roundNr);
 
 		// starting cars one by one
 		for (Car c : carList) {
@@ -42,7 +44,7 @@ public class SimRace {
 				return;
 			}
 		}
-		sortCars();
+		
 		System.out.println(endAnalysis(carList));
 	}
 
@@ -81,10 +83,10 @@ public class SimRace {
 	 * @return
 	 */
 	private static boolean areAlive(ArrayList<Car> list) {
-		boolean status = true;
+		boolean status = false;
 		for (Car c : list) {
-			if (!c.isAlive()) {
-				status = false;
+			if (c.isAlive()) {
+				status = true;
 			}
 		}
 		return status;
@@ -96,13 +98,16 @@ public class SimRace {
 	 * @param list
 	 * @return race result
 	 */
-	private static String endAnalysis(ArrayList<Car> list) {
+	private String endAnalysis(ArrayList<Car> list) {
 		int platz = 1;
+		
+		this.sortCars();
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("---------ENDE DES RENNENS------------\n");
 
 		for (Car c : list) {
-			sb.append(platz).append(". Wagen: ").append(c.getName()).append(" Zeit: ").append(c.getTime()).append("\n");
+			sb.append(platz).append(". Wagen: ").append(c.getName()).append(" Zeit: ").append(c.getTime()).append(" ms\n");
 			platz++;
 		}
 		return sb.toString();
@@ -114,6 +119,6 @@ public class SimRace {
 	 * @throws InterruptedException
 	 */
 	public static void main(String[] args) throws InterruptedException {
-		new SimRace(5, 10);
+		new SimRace(50, 50);
 	}
 }

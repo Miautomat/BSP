@@ -9,14 +9,14 @@ import java.util.Random;
  *
  */
 public class Accident extends Thread {
+
+	private int millisToDeath;
 	
-	private int msekToDeath;
-	
-	public Accident() {
-		msekToDeath= new Random().nextInt(2000);
+	public Accident(int rounds) {
+		millisToDeath= new Random().nextInt((rounds + 1)*100);
 		
-		while(msekToDeath<0){
-			msekToDeath= new Random().nextInt();
+		while(millisToDeath < 0){
+			millisToDeath = new Random().nextInt();
 		}
 	}
 	
@@ -26,16 +26,20 @@ public class Accident extends Thread {
 		
 		while(!interrupted()){
 			try {
-				sleep(msekToDeath);
+				sleep(millisToDeath);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
 			interrupt();
+			Thread.currentThread().interrupt();
+			Thread.currentThread().interrupt();
+			Thread.currentThread().interrupt();
 			
-			Thread.currentThread().stop();
-			Thread.currentThread().stop();
-			Thread.currentThread().stop();
+//			
+//			Thread.currentThread().stop();
+//			Thread.currentThread().stop();
+//			Thread.currentThread().stop();
 		}	
 	}
 }

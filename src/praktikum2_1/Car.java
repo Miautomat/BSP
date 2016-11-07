@@ -47,9 +47,11 @@ public class Car extends Thread {
 		interrupt();
 
 		Thread.currentThread().interrupt();
-		Thread.currentThread().stop();
-		Thread.currentThread().stop();
-		Thread.currentThread().stop();
+		Thread.currentThread().interrupt();
+		Thread.currentThread().interrupt();
+		Thread.currentThread().interrupt();
+//		Thread.currentThread().stop();
+//		Thread.currentThread().stop();
 	}
 
 	public long getTime() {
