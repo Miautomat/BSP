@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Class to represent cars in the race
  * 
- * @author Patrik Höling, Mieke Narjes
+ * @author Patrick Höling, Mieke Narjes
  *
  */
 public class Car extends Thread {
@@ -13,14 +13,15 @@ public class Car extends Thread {
 	private String name;
 	private long startTime;
 	private long endTime;
-	private int roundNr;
+	private int rounds;
+	private int currRound = 0;
 	private int maxSleep = 100;
 
 	public Car(String name, int rounds, ThreadGroup tg) {
 		super(tg, name);
 		this.name = name;
 		this.setName(name);
-		this.roundNr = rounds;
+		this.rounds = rounds; // zu fahrende Runden
 	}
 
 	@Override
@@ -28,30 +29,30 @@ public class Car extends Thread {
 		super.run();
 
 		startTime = System.currentTimeMillis();
-		
+
 		Random random = new Random();
 		int sleepTime;
 
-		for (int i = 0; i <= roundNr; i++) {
+		while (!isInterrupted()) {
+
 			sleepTime = random.nextInt(maxSleep);
 			try {
+				currRound++;
 				sleep(sleepTime);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				interrupt();
 			}
-
+			if (currRound >= rounds) {
+				interrupt();
+			}
 		}
-		
+
 		endTime = System.currentTimeMillis();
+	}
 
-		interrupt();
-
-		Thread.currentThread().interrupt();
-		Thread.currentThread().interrupt();
-		Thread.currentThread().interrupt();
-		Thread.currentThread().interrupt();
-//		Thread.currentThread().stop();
-//		Thread.currentThread().stop();
+	public int getCurrRound() {
+		return this.currRound;
 	}
 
 	public long getTime() {

@@ -1,45 +1,37 @@
 package praktikum2_1;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Class that represents Accidents in the Racing
  * 
- * @author Patrik Höling, Mieke Narjes
+ * @author Patrick Höling, Mieke Narjes
  *
  */
 public class Accident extends Thread {
 
 	private int millisToDeath;
+	private ArrayList<Car> autoListe;
 	
-	public Accident(int rounds) {
+	public Accident(ArrayList<Car> carList, int rounds) {
 		millisToDeath= new Random().nextInt((rounds + 1)*100);
-		
-		while(millisToDeath < 0){
-			millisToDeath = new Random().nextInt();
-		}
+		autoListe=carList;
 	}
 	
 	@Override
 	public void run() {
 		super.run();
 		
-		while(!interrupted()){
 			try {
 				sleep(millisToDeath);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				interrupt();
 			}
 			
-			interrupt();
-			Thread.currentThread().interrupt();
-			Thread.currentThread().interrupt();
-			Thread.currentThread().interrupt();
-			
-//			
-//			Thread.currentThread().stop();
-//			Thread.currentThread().stop();
-//			Thread.currentThread().stop();
-		}	
+			for (Car auto : autoListe){
+				auto.interrupt();
+			}	
 	}
 }

@@ -6,7 +6,7 @@ import java.util.Comparator;
 /**
  * Class which starts the Racing
  * 
- * @author Patrik Höling, Mieke Narjes
+ * @author Patrick Höling, Mieke Narjes
  *
  */
 public class SimRace {
@@ -27,7 +27,7 @@ public class SimRace {
 	 * starts the race itself and runs the evaluation
 	 */
 	public void race() {
-		Accident accident = new Accident(roundNr);
+		Accident accident = new Accident(carList, roundNr);
 
 		// starting cars one by one
 		for (Car c : carList) {
@@ -38,13 +38,22 @@ public class SimRace {
 		accident.start();
 
 		// Checking for Accident
-		while (areAlive(carList)) {
-			if (!accident.isAlive()) {
-				System.out.println("unfall");
-				return;
+		allFinished(carList);
+		if (!accident.isAlive()) {
+			System.out.println("unfall\n");
+			for (Car c : carList) {
+				System.out.println(c.getName() + " gestoppt in Runde " + c.getCurrRound());
 			}
+			return;
 		}
-		
+
+		accident.interrupt();
+		try {
+			accident.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(endAnalysis(carList));
 	}
 
@@ -63,7 +72,7 @@ public class SimRace {
 			carList.add(new Car(carNr, rounds, carGroup));
 		}
 	}
-	
+
 	/**
 	 * sorts the cars by their racing time
 	 */
@@ -82,11 +91,14 @@ public class SimRace {
 	 * @param list
 	 * @return
 	 */
-	private static boolean areAlive(ArrayList<Car> list) {
-		boolean status = false;
+	private static boolean allFinished(ArrayList<Car> list) {
+		boolean status = true;
 		for (Car c : list) {
-			if (c.isAlive()) {
-				status = true;
+			try {
+				c.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		return status;
@@ -100,14 +112,15 @@ public class SimRace {
 	 */
 	private String endAnalysis(ArrayList<Car> list) {
 		int platz = 1;
-		
+
 		this.sortCars();
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("---------ENDE DES RENNENS------------\n");
 
 		for (Car c : list) {
-			sb.append(platz).append(". Wagen: ").append(c.getName()).append(" Zeit: ").append(c.getTime()).append(" ms\n");
+			sb.append(platz).append(". Wagen: ").append(c.getName()).append(" Zeit: ").append(c.getTime())
+					.append(" ms\n");
 			platz++;
 		}
 		return sb.toString();
@@ -115,10 +128,11 @@ public class SimRace {
 
 	/**
 	 * Main Method to actually run the race
+	 * 
 	 * @param args
 	 * @throws InterruptedException
 	 */
 	public static void main(String[] args) throws InterruptedException {
-		new SimRace(50, 50);
+		new SimRace(5, 10);
 	}
 }
