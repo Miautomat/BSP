@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class Player extends Thread {
 	
-	private Symbol obj;
+	private Symbol choice;
 	private Random RANDOM;
 	private int wins = 0;
 
@@ -29,18 +29,27 @@ public class Player extends Thread {
 	public void run() {
 		super.run();
 		/*
-		 * während !interrupted()
+		 * während (!interrupted()){
 		 * wait Schiedrichter ok gegeben
 		 * go
+		 * }
+		 * 
+		 * interrupt()
 		 */
+		
+		while(!interrupted()){
+			// warte auf Schiedrichter
+			choice();
+		}
+		interrupt();
 	}
 	
-	public Symbol getObj(){
-		return this.obj;
+	public Symbol getChoice(){
+		return this.choice;
 	}
 	
-	public void clearObj(){
-		obj = null;
+	public void clearChoice(){
+		choice = null;
 	}
 	
 	public void setWin(){

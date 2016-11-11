@@ -20,8 +20,8 @@ public class Judge extends Thread{
 	 * @return winner or null if draw
 	 */
 	private Player compare(Player o1, Player o2){
-		Symbol obj1 = o1.getObj();
-		Symbol obj2 = o2.getObj();
+		Symbol obj1 = o1.getChoice();
+		Symbol obj2 = o2.getChoice();
 		
 		Player winner = null;
 		
