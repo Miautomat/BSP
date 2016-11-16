@@ -8,7 +8,8 @@ public class Mensakasse{
 	private ReentrantLock lock = new ReentrantLock();
 	private ReentrantLock lockSemaphore = new ReentrantLock();
 	private int kassenNummer;
-	private final Semaphore semaphore = new Semaphore(100);
+	private final Semaphore semaphore = new Semaphore(1);
+	private int warteschlangennummer=0;
 	
 	public Mensakasse(int nummer) {
 		kassenNummer=nummer;
@@ -19,15 +20,28 @@ public class Mensakasse{
 		lock.lock();
 		try {
 			//hier wird bezahlt
+			System.out.println("Es warten andere Studenten damit sie Bezahlen können: "+semaphore.getQueueLength());
+			
 			System.out.println("An Kasse "+kassenNummer+" wird bezahlt");
+			
+			Thread.currentThread().sleep(500);
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			lock.unlock();
 		}
-		lock.unlock();
-	}
-	public int getHoldCount(){
 		
-		return lock.getHoldCount();
+		if(lock.isHeldByCurrentThread()){
+			lock.unlock();
+		}
+		
+		
+	}
+	public Semaphore getSemaphore(){
+		
+		return semaphore;
 	}
 	
 
