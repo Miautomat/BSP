@@ -18,7 +18,6 @@ public class Game {
     private Player player2;
     private Judge judge;
     private int draw;
-    private long time;
     Symbol player1Choice;
     Symbol player2Choice;
     private List<Player> playerList = new ArrayList<>();
@@ -28,21 +27,9 @@ public class Game {
      * 
      * @throws InterruptedException
      */
-    public Game(String player1, String player2, long time) throws InterruptedException {
+    public Game(String player1, String player2) throws InterruptedException {
         createPlayers(player1, player2);
         this.judge = new Judge(this);
-        this.time = time;
-        play();
-    }
-    
-    public void play() throws InterruptedException {
-        player1.start();
-        player2.start();
-        judge.start();
-        TimeUnit.SECONDS.sleep(time);
-        player1.interrupt();
-        player2.interrupt();
-        judge.interrupt();
     }
     
     private void createPlayers(String player1, String player2) {
@@ -202,6 +189,13 @@ public class Game {
     }
     
     public static void main(String[] args) throws InterruptedException {
-        new Game("Anna", "Hugo", 5);
+        Game g = new Game("Anna", "Hugo");
+        g.player1.start();
+        g.player2.start();
+        g.judge.start();
+        TimeUnit.SECONDS.sleep(5);
+        g.player1.interrupt();
+        g.player2.interrupt();
+        g.judge.interrupt();
     }
 }
