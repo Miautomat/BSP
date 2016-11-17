@@ -9,11 +9,15 @@ import java.util.Random;
  */
 public class Player extends Thread {
     
+    private String name;
+    private Game game;
     private Symbol choice;
     private int wins = 0;
     
-    public Player(String name) {
+    public Player(String name, Game game) {
         super(name);
+        this.name = name;
+        this.game = game;
     }
     
     /**
@@ -24,19 +28,39 @@ public class Player extends Thread {
     }
     
     @Override
-    public synchronized void run() {
-        super.run();
-        
+    public void run() {
         while (!interrupted()) {
-            choice();
+            choice = choice();
             try {
-                wait();
+                game.playersChoice(choice, this);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                interrupt();
             }
         }
-        interrupt();
+        System.err.println("Player " + name + " stopped");
+    }
+    
+    /**
+     * represents the players choice between Schere, Stein, Papier
+     * 
+     * @return random GameObject
+     */
+    private Symbol choice() {
+        Symbol choice = null;
+        
+        int rand = new Random().nextInt(3);
+        switch (rand) {
+        case 0:
+            choice = Symbol.SCHERE;
+            break;
+        case 1:
+            choice = Symbol.STEIN;
+            break;
+        case 2:
+            choice = Symbol.PAPIER;
+            break;
+        }
+        return choice;
     }
     
     public Symbol getChoice() {
@@ -53,28 +77,5 @@ public class Player extends Thread {
     
     public int getWins() {
         return this.wins;
-    }
-    
-    /**
-     * represents the players choice between Schere, Stein, Papier
-     * 
-     * @return random GameObject
-     */
-    private Symbol choice() {
-        Symbol choice = null;
-        
-        int rand = new Random().nextInt(2) + 1;
-        switch (rand) {
-        case 1:
-            choice = Symbol.SCHERE;
-            break;
-        case 2:
-            choice = Symbol.STEIN;
-            break;
-        case 3:
-            choice = Symbol.PAPIER;
-            break;
-        }
-        return choice;
     }
 }
