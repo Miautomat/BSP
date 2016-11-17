@@ -63,11 +63,13 @@ public class Game {
             symbol = player2Choice;
             playerID = "player2";
         }
-        
+        // wait until the table is clear
         while (symbol != null) {
+            System.out.println("Player wait");
             this.wait();
         }
         
+        // make a choice
         switch (playerID) {
         case "player1":
             player1Choice = choice;
@@ -76,14 +78,23 @@ public class Game {
             player2Choice = choice;
             break;
         }
+        // notify everyone - especially the judge
         System.out.println(player.getName() + " chooses " + choice);
         notifyAll();
     }
     
+    /**
+     * will add a win for the winner and clear the table
+     * 
+     * @throws InterruptedException
+     */
     synchronized void judgeRound() throws InterruptedException {
         while (player1Choice == null || player2Choice == null) {
+            // wait until both players made their choice
+            System.out.println("\tJudge wait");
             wait();
         }
+        // find winner and set win or draw
         Player winner = this.compareChoices(player1, player2);
         if (winner != null) {
             System.out.println(winner.getName() + " wins");
@@ -92,6 +103,7 @@ public class Game {
             System.out.println("draw");
             draw++;
         }
+        // reset the table - start again
         clearTable();
         notifyAll();
     }
@@ -147,6 +159,9 @@ public class Game {
         return winner;
     }
     
+    /**
+     * clears table and players Choice
+     */
     private void clearTable() {
         player1Choice = null;
         player2Choice = null;

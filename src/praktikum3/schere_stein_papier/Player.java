@@ -27,6 +27,9 @@ public class Player extends Thread {
         SCHERE, STEIN, PAPIER
     }
     
+    /**
+     * player will make a choice and 'give' it to the game
+     */
     @Override
     public void run() {
         while (!interrupted()) {

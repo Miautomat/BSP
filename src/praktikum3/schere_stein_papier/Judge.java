@@ -12,6 +12,9 @@ public class Judge extends Thread {
         this.game = game;
     }
     
+    /**
+     * will judge the round and print endAnalysis if interrupted
+     */
     @Override
     public void run() {
         while (!interrupted()) {
