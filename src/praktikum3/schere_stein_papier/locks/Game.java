@@ -1,11 +1,14 @@
-package praktikum3.schere_stein_papier;
+package praktikum3.schere_stein_papier.locks;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-import praktikum3.schere_stein_papier.Player.Symbol;
+import praktikum3.schere_stein_papier.locks.Player.Symbol;
 
 /**
  * Class that represents the game itself
@@ -14,13 +17,18 @@ import praktikum3.schere_stein_papier.Player.Symbol;
  */
 
 public class Game {
-    private Player player1;
-    private Player player2;
+    Player player1;
+    Player player2;
     private Judge judge;
     private int draw;
     Symbol player1Choice;
     Symbol player2Choice;
     private List<Player> playerList = new ArrayList<>();
+    
+    private final Lock lock = new ReentrantLock();
+    private Condition playersWaiting = lock.newCondition();
+    private Condition playersChoosing = lock.newCondition();
+    private Condition set = lock.newCondition();
     
     /**
      * Initializes Players and judges and starts the game
@@ -40,35 +48,50 @@ public class Game {
         playerList.add(this.player2);
     }
     
-    synchronized void playersChoice(Symbol choice, Player player) throws InterruptedException {
-        Symbol symbol;
-        String playerID;
-        if (player == player1) {
-            symbol = player1Choice;
-            playerID = "player1";
-        } else {
-            symbol = player2Choice;
-            playerID = "player2";
-        }
-        // wait until the table is clear
-        while (symbol != null) {
-            System.out.println(player.getName() + " wait with " + symbol);
-            this.wait();
+    void player1Choosing(Symbol choice) throws InterruptedException {
+        lock.lockInterruptibly();
+        try {
+            // wait until the table is clear
+            while (player1Choice != null) {
+                playersWaiting.await();
+            }
+            
+            this.player1Choice = choice;
+            // notify everyone - especially the judge
+            System.out.println(player1.getName() + " chooses " + choice);
+            
+            // choosing the fitting Condition for Signal
+            if (player2Choice != null) {
+                playersChoosing.signal();
+            } else {
+                playersWaiting.signal();
+            }
+        } finally {
+            lock.unlock();
         }
         
-        // make a choice
-        switch (playerID) {
-        case "player1":
-            player1Choice = choice;
-            break;
-        case "player2":
-            player2Choice = choice;
-            break;
+    }
+    
+    void player2Choosing(Symbol choice) throws InterruptedException {
+        lock.lockInterruptibly();
+        try {
+            // wait until the table is clear
+            while (player2Choice != null) {
+                playersWaiting.await();
+            }
+            
+            this.player2Choice = choice;
+            // notify everyone - especially the judge
+            System.out.println(player2.getName() + " chooses " + choice);
+            // choosing the fitting Condition for Signal
+            if (player1Choice != null) {
+                playersChoosing.signal();
+            } else {
+                playersWaiting.signal();
+            }
+        } finally {
+            lock.unlock();
         }
-        // notify everyone - especially the judge
-        System.out.println(player.getName() + " chooses " + choice);
-        System.out.println(player.getName() + " notifying all");
-        notifyAll();
     }
     
     /**
@@ -76,26 +99,28 @@ public class Game {
      * 
      * @throws InterruptedException
      */
-    synchronized void judgeRound() throws InterruptedException {
-        System.out.println("judgeRound entered");
-        while (player1Choice == null || player2Choice == null) {
-            // wait until both players made their choice
-            System.out.println("\tJudge wait");
-            wait();
+    void judgeRound() throws InterruptedException {
+        lock.lockInterruptibly(); // can react to interrupts send by other
+                                  // Threads
+        try {
+            while (player1Choice == null || player2Choice == null) {
+                // wait until both players made their choice (wait for signal)
+                playersChoosing.await();
+            }
+            // find winner and set win or draw
+            Player winner = this.compareChoices(player1, player2);
+            if (winner != null) {
+                System.out.println("\t" + winner.getName() + " wins");
+                winner.setWin();
+            } else {
+                System.out.println("\tdraw");
+                draw++;
+            }
+            clearTable();
+            playersWaiting.signal();
+        } finally {
+            lock.unlock();
         }
-        // find winner and set win or draw
-        Player winner = this.compareChoices(player1, player2);
-        if (winner != null) {
-            System.out.println("\t" + winner.getName() + " wins");
-            winner.setWin();
-        } else {
-            System.out.println("\tdraw");
-            draw++;
-        }
-        // reset the table - start again
-        clearTable();
-        notifyAll();
-        System.out.println("\tJudge notified all");
     }
     
     /**
@@ -104,7 +129,6 @@ public class Game {
      * @return winner or null if draw
      */
     private Player compareChoices(Player o1, Player o2) {
-        System.out.println("Judge comparing choices");
         Symbol obj1 = player2Choice;
         Symbol obj2 = player1Choice;
         

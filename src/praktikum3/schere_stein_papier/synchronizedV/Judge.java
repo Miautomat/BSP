@@ -1,4 +1,4 @@
-package praktikum3.schere_stein_papier;
+package praktikum3.schere_stein_papier.synchronizedV;
 
 /**
  * Class that represents the Judge for a Schere-Stein-Papier game

@@ -1,4 +1,4 @@
-package praktikum3.schere_stein_papier;
+package praktikum3.schere_stein_papier.locks;
 
 import java.util.Random;
 
@@ -23,7 +23,7 @@ public class Player extends Thread {
     /**
      * Enum that represents the game-Objects
      */
-    public enum Symbol {
+    enum Symbol {
         SCHERE, STEIN, PAPIER
     }
     
@@ -34,11 +34,12 @@ public class Player extends Thread {
     public void run() {
         while (!interrupted()) {
             choice = choice();
-            System.out.println(this.getName() + " making new choice " +
-                choice);
             try {
-                game.playersChoice(choice, this);
-                System.out.println(this.getName() + " woke up from wait in playersChoice");
+                if (this == game.player1) {
+                    game.player1Choosing(choice);
+                } else {
+                    game.player2Choosing(choice);
+                }
             } catch (InterruptedException e) {
                 interrupt();
             }
@@ -52,11 +53,9 @@ public class Player extends Thread {
      * @return random GameObject
      */
     Symbol choice() {
-        System.out.println(this.getName() + " choice entered");
         Symbol choice = null;
         
         int rand = new Random().nextInt(3);
-        System.out.println(this.getName() + " " + rand);
         switch (rand) {
         case 0:
             choice = Symbol.SCHERE;
