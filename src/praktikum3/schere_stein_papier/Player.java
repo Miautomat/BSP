@@ -34,8 +34,11 @@ public class Player extends Thread {
     public void run() {
         while (!interrupted()) {
             choice = choice();
+            System.out.println(this.getName() + " making new choice " +
+                choice);
             try {
                 game.playersChoice(choice, this);
+                System.out.println(this.getName() + " woke up from wait in playersChoice");
             } catch (InterruptedException e) {
                 interrupt();
             }
@@ -48,10 +51,12 @@ public class Player extends Thread {
      * 
      * @return random GameObject
      */
-    private Symbol choice() {
+    Symbol choice() {
+        System.out.println(this.getName() + " choice entered");
         Symbol choice = null;
         
         int rand = new Random().nextInt(3);
+        System.out.println(this.getName() + " " + rand);
         switch (rand) {
         case 0:
             choice = Symbol.SCHERE;

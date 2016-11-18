@@ -52,7 +52,7 @@ public class Game {
         }
         // wait until the table is clear
         while (symbol != null) {
-            System.out.println("Player wait");
+            System.out.println(player.getName() + " wait with " + symbol);
             this.wait();
         }
         
@@ -67,6 +67,7 @@ public class Game {
         }
         // notify everyone - especially the judge
         System.out.println(player.getName() + " chooses " + choice);
+        System.out.println(player.getName() + " notifying all");
         notifyAll();
     }
     
@@ -76,6 +77,7 @@ public class Game {
      * @throws InterruptedException
      */
     synchronized void judgeRound() throws InterruptedException {
+        System.out.println("judgeRound entered");
         while (player1Choice == null || player2Choice == null) {
             // wait until both players made their choice
             System.out.println("\tJudge wait");
@@ -84,15 +86,16 @@ public class Game {
         // find winner and set win or draw
         Player winner = this.compareChoices(player1, player2);
         if (winner != null) {
-            System.out.println(winner.getName() + " wins");
+            System.out.println("\t" + winner.getName() + " wins");
             winner.setWin();
         } else {
-            System.out.println("draw");
+            System.out.println("\tdraw");
             draw++;
         }
         // reset the table - start again
         clearTable();
         notifyAll();
+        System.out.println("\tJudge notified all");
     }
     
     /**
@@ -101,6 +104,7 @@ public class Game {
      * @return winner or null if draw
      */
     private Player compareChoices(Player o1, Player o2) {
+        System.out.println("Judge comparing choices");
         Symbol obj1 = player2Choice;
         Symbol obj2 = player1Choice;
         
