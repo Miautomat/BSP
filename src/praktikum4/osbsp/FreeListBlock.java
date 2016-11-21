@@ -17,7 +17,8 @@ public class FreeListBlock implements Comparable<Object> {
     }
     
     /**
-     * Vergleichsfunktion f�r Sortierung
+     * Vergleichsfunktion f�r Sortierung gibt die Differenz zwischen den
+     * Adressen zurück. negativ: otherBlock > this -- poitiv: this > otherBlock
      */
     
     @Override
