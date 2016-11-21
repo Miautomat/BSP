@@ -6,18 +6,25 @@ public class Mensa {
 	
 	static ArrayList<Mensakasse> listeKassen = new ArrayList<Mensakasse>();
 	static ArrayList<Student> listeStudenten = new ArrayList<Student>();
+	static Integer anzahlStudenten=20;
+	static Integer anzahlKassen=3;
+	
 	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Mensakasse kasse1 = new Mensakasse(1);
-		listeKassen.add(kasse1);
-		listeKassen.add(new Mensakasse(2));
+
+		
+		for(int i=1; i<=anzahlKassen;i++){
+			
+			listeKassen.add(new Mensakasse(i));
+			
+		}
 		
 			
 		
-		for(int i=1; i<=100;i++){
+		for(int i=1; i<=anzahlStudenten;i++){
 			Student temp = new Student(1000, listeKassen);
 			temp.setName("Student"+i);
 			
@@ -40,7 +47,14 @@ public class Mensa {
 		
 		for(Student elem : listeStudenten){
 			System.out.println(elem.getName()+" wird beendet");
+			
+			
+			elem.stopThat();
 			elem.interrupt();
+
+//			elem.stop();
+			
+			
 			try {
 				elem.join();
 			} catch (InterruptedException e) {
@@ -58,7 +72,7 @@ public class Mensa {
 	
 	public void sleep(){
 		try {
-			Thread.currentThread().sleep(5000);
+			Thread.currentThread().sleep(10000);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

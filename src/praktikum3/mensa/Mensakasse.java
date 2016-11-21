@@ -27,8 +27,8 @@ public class Mensakasse{
 			Thread.currentThread().sleep(500);
 			
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+//			e.printStackTrace();
 		} finally {
 			lock.unlock();
 		}
@@ -42,6 +42,11 @@ public class Mensakasse{
 	public Semaphore getSemaphore(){
 		
 		return semaphore;
+	}
+	public String getName(){
+		
+		return ""+kassenNummer;
+		
 	}
 	
 

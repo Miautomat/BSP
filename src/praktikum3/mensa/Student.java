@@ -8,6 +8,7 @@ public class Student extends Thread {
 
 	int maxEssensZeit = 100;
 	ArrayList<Mensakasse> listeKassen;
+	boolean stoppen = false;
 
 	public Student(int waittime, ArrayList<Mensakasse> listeKasse) {
 		super();
@@ -20,33 +21,44 @@ public class Student extends Thread {
 	@Override
 	public void run() {
 
-		super.run();
+//		super.run();
 
-		while (!isInterrupted()) {
+		while (!isInterrupted() && !stoppen) {
 
-			if (isInterrupted()) {
-				interrupt();
-			}
+			
+				
 
-			Mensakasse aktuelleKasse = getMinimum();
-			Semaphore semaphore = aktuelleKasse.getSemaphore();
+				Mensakasse aktuelleKasse = getMinimum();
+				Semaphore semaphore = aktuelleKasse.getSemaphore();
 
-			System.out.println(getName() + " will bezahlen");
+				System.out.println(getName() + " stellt sich an Kasse "+aktuelleKasse.getName()+" an");
 
-			try {
-				semaphore.acquire();
-				aktuelleKasse.bezahlen();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} finally {
+				try {
+					semaphore.acquire();
+					System.out.println("Student "+this.getName()+" bezahlt");
+					
+					aktuelleKasse.bezahlen();
+					
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					interrupt();
+					e.printStackTrace();
+					
+				} finally {
+					stoppen=true;
 
+					interrupt();
+					semaphore.release();
+				}
+				
+				
 				semaphore.release();
-			}
-			semaphore.release();
 
-			System.out.println(getName() + " hat bezahlt und geht essen");
-			geheEssen();
+				System.out.println(getName() + " hat bezahlt und geht essen");
+				geheEssen();
+
+		
+				
 
 		}
 
@@ -82,8 +94,15 @@ public class Student extends Thread {
 		try {
 			Thread.currentThread().sleep(schlafenszeit.nextInt(maxEssensZeit));
 		} catch (Exception e) {
-			// TODO: handle exception
+			interrupt();
+			stoppen=true;
 		}
+
+	}
+
+	public void stopThat() {
+		interrupt();
+		stoppen = true;
 
 	}
 
