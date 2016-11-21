@@ -10,6 +10,7 @@ public class Mensakasse{
 	private int kassenNummer;
 	private final Semaphore semaphore = new Semaphore(1);
 	private int warteschlangennummer=0;
+	private int bezahlzeit = 500;
 	
 	public Mensakasse(int nummer) {
 		kassenNummer=nummer;
@@ -17,26 +18,22 @@ public class Mensakasse{
 	
 	public void bezahlen(){
 		
-		lock.lock();
+		
 		try {
 			//hier wird bezahlt
 //			System.out.println("Es warten andere Studenten damit sie Bezahlen können: "+semaphore.getQueueLength());
 			
+			
+			
 			System.out.println("An Kasse "+kassenNummer+" wird bezahlt");
 			
-			Thread.currentThread().sleep(500);
+			Thread.currentThread().sleep(bezahlzeit);
 			
 		} catch (InterruptedException e) {
 
 //			e.printStackTrace();
-		} finally {
-			lock.unlock();
 		}
-		
-		if(lock.isHeldByCurrentThread()){
-			lock.unlock();
-		}
-		
+	
 		
 	}
 	public Semaphore getSemaphore(){
@@ -46,6 +43,11 @@ public class Mensakasse{
 	public String getName(){
 		
 		return ""+kassenNummer;
+		
+	}
+	public synchronized Integer getQueueLength(){
+		
+		return semaphore.getQueueLength();
 		
 	}
 	

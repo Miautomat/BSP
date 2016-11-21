@@ -8,7 +8,7 @@ public class Mensa {
 	static ArrayList<Student> listeStudenten = new ArrayList<Student>();
 	static Integer anzahlStudenten=10;
 	static Integer anzahlKassen=2;
-	static long millis = 20000;
+	static long millis = 10000;
 	
 	
 
@@ -34,6 +34,7 @@ public class Mensa {
 			
 			
 		}
+		System.out.println("\t\t Mensa wird geoeffnet");
 		
 		for(Student elem : listeStudenten){
 			
@@ -46,6 +47,9 @@ public class Mensa {
 		
 		mensa.sleep();
 		
+		System.out.println("\t\t Mensa wird geschlossen");
+		
+		
 		for(Student elem : listeStudenten){
 			System.out.println(elem.getName()+" wird beendet");
 			
@@ -56,6 +60,11 @@ public class Mensa {
 //			elem.stop();
 			
 			
+			
+			
+		}
+		for(Student elem : listeStudenten){
+			
 			try {
 				elem.join();
 			} catch (InterruptedException e) {
@@ -65,7 +74,7 @@ public class Mensa {
 			
 		}
 		
-		
+		System.out.println("\t\t Mensa ist zu und es ist keinStudent mehr da");
 		
 		
 

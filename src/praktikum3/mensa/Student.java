@@ -31,36 +31,39 @@ public class Student extends Thread {
 				Mensakasse aktuelleKasse = getMinimum();
 				Semaphore semaphore = aktuelleKasse.getSemaphore();
 
-				System.out.println(getName() + " stellt sich an Kasse "+aktuelleKasse.getName()+" an");
+				System.out.println("\t"+getName() + " stellt sich an Kasse "+aktuelleKasse.getName()+" an");
 
 				try {
 					semaphore.acquire();
-					System.out.println("Student "+this.getName()+" bezahlt an Kasse "+aktuelleKasse.getName());
+					System.out.println("\t"+"Student "+this.getName()+" bezahlt an Kasse "+aktuelleKasse.getName());
 					
 					aktuelleKasse.bezahlen();
 					
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					interrupt();
-					e.printStackTrace();
+//					e.printStackTrace();
 					
 				} finally {
-					stoppen=true;
+					
 
-					interrupt();
+//					stoppen=true;
+//					interrupt();
 					semaphore.release();
 				}
 				
 				
-				semaphore.release();
+//				semaphore.release();
 
-				System.out.println(getName() + " hat bezahlt und geht essen");
+//				System.out.println("\t"+getName() + " hat bezahlt und geht essen");
 				geheEssen();
+//				System.out.println("\t"+getName()+" hat gegessen");
 
 		
 				
 
 		}
+		System.out.println(getName()+" geht nach Hause");
 
 	}
 
@@ -73,9 +76,9 @@ public class Student extends Thread {
 
 			if (minK == null) {
 				minK = elem;
-				minAnzahl = elem.getSemaphore().getQueueLength();
+				minAnzahl = elem.getQueueLength();
 			}
-			int tempAnzahl = elem.getSemaphore().getQueueLength();
+			int tempAnzahl = elem.getQueueLength();
 			if (minAnzahl > tempAnzahl) {
 				minK = elem;
 				minAnzahl = tempAnzahl;
@@ -92,8 +95,10 @@ public class Student extends Thread {
 		Random schlafenszeit = new Random();
 
 		try {
+			
 			Thread.currentThread().sleep(schlafenszeit.nextInt(maxEssensZeit));
-		} catch (Exception e) {
+		} 
+		catch (InterruptedException e) {
 //			interrupt();
 //			stoppen=true;
 		}
@@ -101,7 +106,7 @@ public class Student extends Thread {
 	}
 
 	public void stopThat() {
-		interrupt();
+		
 		stoppen = true;
 
 	}
