@@ -35,7 +35,7 @@ public class Student extends Thread {
 
 				try {
 					semaphore.acquire();
-					System.out.println("Student "+this.getName()+" bezahlt");
+					System.out.println("Student "+this.getName()+" bezahlt an Kasse "+aktuelleKasse.getName());
 					
 					aktuelleKasse.bezahlen();
 					
@@ -94,8 +94,8 @@ public class Student extends Thread {
 		try {
 			Thread.currentThread().sleep(schlafenszeit.nextInt(maxEssensZeit));
 		} catch (Exception e) {
-			interrupt();
-			stoppen=true;
+//			interrupt();
+//			stoppen=true;
 		}
 
 	}

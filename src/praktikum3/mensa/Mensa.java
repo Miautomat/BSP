@@ -6,8 +6,9 @@ public class Mensa {
 	
 	static ArrayList<Mensakasse> listeKassen = new ArrayList<Mensakasse>();
 	static ArrayList<Student> listeStudenten = new ArrayList<Student>();
-	static Integer anzahlStudenten=20;
-	static Integer anzahlKassen=3;
+	static Integer anzahlStudenten=10;
+	static Integer anzahlKassen=2;
+	static long millis = 20000;
 	
 	
 
@@ -72,7 +73,7 @@ public class Mensa {
 	
 	public void sleep(){
 		try {
-			Thread.currentThread().sleep(10000);
+			Thread.currentThread().sleep(millis);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
