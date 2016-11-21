@@ -34,10 +34,35 @@ public class Mensa {
 		}
 		
 		
+		Mensa mensa = new Mensa();
+		
+		mensa.sleep();
+		
+		for(Student elem : listeStudenten){
+			System.out.println(elem.getName()+" wird beendet");
+			elem.interrupt();
+			try {
+				elem.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
 		
 		
 		
 
+	}
+	
+	public void sleep(){
+		try {
+			Thread.currentThread().sleep(5000);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 
 }

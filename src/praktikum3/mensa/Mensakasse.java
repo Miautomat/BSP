@@ -20,7 +20,7 @@ public class Mensakasse{
 		lock.lock();
 		try {
 			//hier wird bezahlt
-			System.out.println("Es warten andere Studenten damit sie Bezahlen können: "+semaphore.getQueueLength());
+//			System.out.println("Es warten andere Studenten damit sie Bezahlen können: "+semaphore.getQueueLength());
 			
 			System.out.println("An Kasse "+kassenNummer+" wird bezahlt");
 			
