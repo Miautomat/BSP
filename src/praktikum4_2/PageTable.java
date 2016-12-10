@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-import praktikum4_1.PageTableEntry;
-
 /**
  * PageTable.java Eine Seitentabelle eines Prozesses, implementiert als
  * ArrayList von PageTableEntry-Elementen (pte)

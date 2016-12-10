@@ -311,17 +311,26 @@ public class OperatingSystem {
          * addresse im ram geladen und aus dem RAM wird das datenwort gelesen
          */
         
+        /*
+         * 1. ermittle den PageTable des Prozesses über die pid ...............
+         * 2. ermittle den pageTableEntry über die vorher gespeicherte
+         * pageNumber
+         */
+        
         int pageNum = getVirtualPageNum(virtAdr);
         PageTable pageTable = getProcess(pid).pageTable;
         PageTableEntry pageTableEntry = pageTable.getPte(pageNum);
         
         if (pageTableEntry != null) {
-            eventLog.incrementReadAccesses();
+            eventLog.incrementReadAccesses();// Statistik
             if (!pageTableEntry.valid) {
                 // noch nicht in Seitentabelle geladen
                 pageTableEntry = handlePageFault(pageTableEntry, pid);
             }
-            //
+            // ab hier sicher in Seitentabelle vorhanden
+            /**
+             * @see VL8 Folie 28
+             */
             int adrInRAM = pageTableEntry.realPageFrameAdr + getOffset(virtAdr);
             pageTableEntry.referenced = true;
             
