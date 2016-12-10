@@ -357,8 +357,15 @@ public class OperatingSystem {
      * @return Den entsprechenden Offset zur Berechnung der realen Adresse
      */
     private int getOffset(int virtAdr) {
-        // TODO
-        return 0;
+        /*
+         * Um den Offset zu errechnen, Wird eine ganzzahlige Division mit rest durchgeführt. Der Rest ist der Offset.
+         * Bei einer Fenstergröße von 256 wäre bei der Adresse 300
+         *   
+         *    300%256=44
+         * 
+         * der Offset 44
+         */
+        return virtAdr % PAGE_SIZE;
     }
     
     /**
