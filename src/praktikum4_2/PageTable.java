@@ -1,4 +1,4 @@
-package praktikum4.osbsp;
+package praktikum4_2;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -166,17 +166,17 @@ public class PageTable {
          * eine zuf�llige zahl zwischen 0 und der maximalen anzahl an elementen.
          * diese seite mit dem index des zufallwertes wird durch die �bergebene ersetzt
          */
-        int zufallswert = new Random().nextInt(pteRAMlist.size()-1);
+        int rand = new Random().nextInt(pteRAMlist.size()-1);
         
         /*
          * es wird der zuf�llige eintrag ausgew�hlt 
          */
-        pte = pteRAMlist.get(zufallswert);
+        pte = pteRAMlist.get(rand);
         
         /*
          * der Alte tabelleneintrag wird mit dem neuen �berschrieben
          */
-        pteRAMlist.set(zufallswert, newPte);
+        pteRAMlist.set(rand, newPte);
         
         
         /*

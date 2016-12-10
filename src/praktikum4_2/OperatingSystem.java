@@ -1,4 +1,4 @@
-package praktikum4.osbsp;
+package praktikum4_2;
 
 /*
  * OperatingSystem.java
@@ -311,27 +311,30 @@ public class OperatingSystem {
          * addresse im ram geladen und aus dem RAM wird das datenwort gelesen
          */
         
-        int seitennummer = getVirtualPageNum(virtAdr);
-        
-        int offset = getOffset(virtAdr);
-        
+        int pageNum = getVirtualPageNum(virtAdr);
         PageTable pageTable = getProcess(pid).pageTable;
+        PageTableEntry pageTableEntry = pageTable.getPte(pageNum);
         
-        PageTableEntry seitenTabellenEintrag = pageTable.getPte(seitennummer);
-        
-        if (seitenTabellenEintrag != null) {
+        if (pageTableEntry != null) {
             eventLog.incrementReadAccesses();
-            int adresseImRAM = seitenTabellenEintrag.realPageFrameAdr;
+            if (!pageTableEntry.valid) {
+                // noch nicht in Seitentabelle geladen
+                pageTableEntry = handlePageFault(pageTableEntry, pid);
+            }
+            //
+            int adrInRAM = pageTableEntry.realPageFrameAdr + getOffset(virtAdr);
+            pageTableEntry.referenced = true;
             
-            eventLog.incrementReadAccesses(); // wozu zweimal???
-            return readFromRAM(adresseImRAM);
+            testOut("OS: read " + readFromRAM(adrInRAM) + " +++ PID: " + pid + " in virt. Adresse "
+                + virtAdr
+                + " gelesen! RAM-Adresse: " + adrInRAM + " \n");
+            
+            return readFromRAM(adrInRAM);
         } else {
             // seitenfehler
             eventLog.incrementPageFaults();
         }
-        
         return -1;
-        
     }
     
     // --------------- Private Methoden des Betriebssystems
@@ -362,7 +365,7 @@ public class OperatingSystem {
          * auf der Seite 1.
          */
         testOut("OS: getVirtualPageNum " + virtAdr / PAGE_SIZE + " +++ from virtAdr: " + virtAdr);
-        return new Double(virtAdr / PAGE_SIZE).intValue();
+        return virtAdr / PAGE_SIZE;
     }
     
     /**

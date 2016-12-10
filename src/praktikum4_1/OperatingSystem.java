@@ -308,6 +308,7 @@ public class OperatingSystem {
         PageTable pageTable = getProcess(pid).pageTable;
         int pageNum = getVirtualPageNum(virtAdr);
         PageTableEntry pageTableEntry = pageTable.getPte(pageNum);
+        
         if (pageTableEntry != null) {
             eventLog.incrementReadAccesses(); // Statistik
             if (!pageTableEntry.valid) {
@@ -315,12 +316,12 @@ public class OperatingSystem {
                 pageTableEntry = handlePageFault(pageTableEntry, pid);
             }
             // ab hier sicher in Seitentabelle vorhanden
-            int ra = pageTableEntry.realPageFrameAdr + getOffset(virtAdr);
+            int adrInRAM = pageTableEntry.realPageFrameAdr + getOffset(virtAdr);
             pageTableEntry.referenced = true;
-            testOut("OS: read " + readFromRAM(ra) + " +++ PID: " + pid + " in virt. Adresse "
+            testOut("OS: read " + readFromRAM(adrInRAM) + " +++ PID: " + pid + " in virt. Adresse "
                 + virtAdr
-                + " gelesen! RAM-Adresse: " + ra + " \n");
-            return readFromRAM(ra);
+                + " gelesen! RAM-Adresse: " + adrInRAM + " \n");
+            return readFromRAM(adrInRAM);
         } else {
             // Fehlerfall pageTableTntry == null
             return -1;
