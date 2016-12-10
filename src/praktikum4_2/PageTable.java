@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
+import praktikum4_1.PageTableEntry;
+
 /**
  * PageTable.java Eine Seitentabelle eines Prozesses, implementiert als
  * ArrayList von PageTableEntry-Elementen (pte)
@@ -159,30 +161,19 @@ public class PageTable {
      * RANDOM-Algorithmus: Zuf�llige Auswahl
      */
     private PageTableEntry randomAlgorithm(PageTableEntry newPte) {
-        // TODO
-        PageTableEntry pte = null;
-        
-        /*
-         * eine zuf�llige zahl zwischen 0 und der maximalen anzahl an elementen.
-         * diese seite mit dem index des zufallwertes wird durch die �bergebene ersetzt
-         */
-        int rand = new Random().nextInt(pteRAMlist.size()-1);
-        
-        /*
-         * es wird der zuf�llige eintrag ausgew�hlt 
-         */
-        pte = pteRAMlist.get(rand);
+        int index = new Random().nextInt(pteRAMlist.size() - 1);
+        PageTableEntry pageTableEntry = pteRAMlist.get(index);
         
         /*
          * der Alte tabelleneintrag wird mit dem neuen �berschrieben
          */
-        pteRAMlist.set(rand, newPte);
-        
-        
+        pteRAMlist.set(index, newPte);
+        os.testOut("Prozess " + pid + ": Random-Algorithmus hat pte ausgew�hlt: "
+            + pageTableEntry.virtPageNum);
         /*
          * Der alte eintrag wird dann zur�ckgeliefert
          */
-        return pte;
+        return pageTableEntry;
     }
     
     // ----------------------- Hilfsmethode --------------------------------

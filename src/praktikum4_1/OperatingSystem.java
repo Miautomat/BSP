@@ -305,8 +305,14 @@ public class OperatingSystem {
      *         Zugriffsfehler
      */
     public synchronized int read(int pid, int virtAdr) {
-        PageTable pageTable = getProcess(pid).pageTable;
+        
+        /*
+         * 1. ermittle den PageTable des Prozesses über die pid ...............
+         * 2. ermittle den pageTableEntry über die vorher gespeicherte
+         * pageNumber
+         */
         int pageNum = getVirtualPageNum(virtAdr);
+        PageTable pageTable = getProcess(pid).pageTable;
         PageTableEntry pageTableEntry = pageTable.getPte(pageNum);
         
         if (pageTableEntry != null) {
@@ -316,14 +322,19 @@ public class OperatingSystem {
                 pageTableEntry = handlePageFault(pageTableEntry, pid);
             }
             // ab hier sicher in Seitentabelle vorhanden
+            /**
+             * @ see VL8 Folie 28
+             */
             int adrInRAM = pageTableEntry.realPageFrameAdr + getOffset(virtAdr);
-            pageTableEntry.referenced = true;
+            pageTableEntry.referenced = true; // Flag setzen
+            
             testOut("OS: read " + readFromRAM(adrInRAM) + " +++ PID: " + pid + " in virt. Adresse "
                 + virtAdr
                 + " gelesen! RAM-Adresse: " + adrInRAM + " \n");
+            
             return readFromRAM(adrInRAM);
         } else {
-            // Fehlerfall pageTableTntry == null
+            // Fehlerfall pageTableEntry == null
             return -1;
         }
     }
@@ -341,6 +352,7 @@ public class OperatingSystem {
     }
     
     /**
+     * @see VL 8 Folie 29
      * @param virtAdr
      *            : eine virtuelle Adresse
      * @return Die entsprechende virtuelle Seitennummer
@@ -351,6 +363,7 @@ public class OperatingSystem {
     }
     
     /**
+     * @see VL 8 Folie 29 unter Punkt 3
      * @param virtAdr
      *            : eine virtuelle Adresse
      * @return Den entsprechenden Offset zur Berechnung der realen Adresse
