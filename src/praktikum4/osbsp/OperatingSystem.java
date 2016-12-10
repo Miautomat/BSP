@@ -17,7 +17,7 @@ public class OperatingSystem {
 	 * max. Anzahl Seiten pro Prozess im Hauptspeicher (sonst Verdrï¿½ngung
 	 * eigener Seiten):
 	 */
-	private int MAX_RAM_PAGES_PER_PROCESS = 10;
+	private int MAX_RAM_PAGES_PER_PROCESS = 15;
 
 	/**
 	 * max. Anzahl Prozesse (muss beschrï¿½nkt werden, da kein Swapping
@@ -30,7 +30,7 @@ public class OperatingSystem {
 	 * Dieser Faktor bestimmt das "Lokalitï¿½tsverhalten" eines Programms (=
 	 * Anzahl Operationen innerhalb eines Seitenbereichs)
 	 */
-	private int DEFAULT_LOCALITY_FACTOR = 30;
+	private int DEFAULT_LOCALITY_FACTOR = 10;
 
 	// ------------ Konfigurierbare maschinenabhï¿½ngige Parameter
 	// ---------------------------------------------------------

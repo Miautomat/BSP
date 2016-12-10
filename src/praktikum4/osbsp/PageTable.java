@@ -2,6 +2,7 @@ package praktikum4.osbsp;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * PageTable.java Eine Seitentabelle eines Prozesses, implementiert als
@@ -161,6 +162,26 @@ public class PageTable {
         // TODO
         PageTableEntry pte = null;
         
+        /*
+         * eine zufällige zahl zwischen 0 und der maximalen anzahl an elementen.
+         * diese seite mit dem index des zufallwertes wird durch die übergebene ersetzt
+         */
+        int zufallswert = new Random().nextInt(pteRAMlist.size()-1);
+        
+        /*
+         * es wird der zufällige eintrag ausgewählt 
+         */
+        pte = pteRAMlist.get(zufallswert);
+        
+        /*
+         * der Alte tabelleneintrag wird mit dem neuen überschrieben
+         */
+        pteRAMlist.set(zufallswert, newPte);
+        
+        
+        /*
+         * Der alte eintrag wird dann zurückgeliefert
+         */
         return pte;
     }
     
