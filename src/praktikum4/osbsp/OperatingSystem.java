@@ -332,14 +332,14 @@ public class OperatingSystem {
          * 
          * Bei einer Seitengröße von 256 gehen die Adressen von Adresse 0 bis 256.
          * 
-         * 		 0   ╔
-         *     		 ║  Seite 0
-         *    		 ║
-         * 		256  ╚
-         * 		257  ╔
-         * ~300 ->	 ║  Seite 1
-         *     		 ║
-         * 		512  ╚
+         * 	      0  ╔
+         *           ║  Seite 0
+         *           ║
+         * 	    256  ╚
+         * 	    257  ╔
+         * ~300 ->   ║  Seite 1
+         *           ║
+         * 	    512  ╚
          * 
          * Als beispiel: wenn wir die Adresse 300 bekommen, so teilen wir 300 durch 256.
          * 
