@@ -300,9 +300,9 @@ public class OperatingSystem {
 	 */
 	public synchronized int read(int pid, int virtAdr) {
 		/*
-		 * Zunächst wird die seitenZahl und der Offset benötigt.
-		 * Dann wird der Seitentabbelleneintrag des Prozesses geholt. Aus dem wird die 
-		 * reale addresse im ram geladen und aus dem RAM wird das datenwort gelesen
+		 * Zunächst wird die seitenZahl und der Offset benötigt. Dann wird der
+		 * Seitentabbelleneintrag des Prozesses geholt. Aus dem wird die reale
+		 * addresse im ram geladen und aus dem RAM wird das datenwort gelesen
 		 */
 
 		int seitennummer = getVirtualPageNum(virtAdr);
@@ -313,11 +313,18 @@ public class OperatingSystem {
 
 		PageTableEntry seitenTabellenEintrag = pageTable.getPte(seitennummer);
 
-		eventLog.incrementReadAccesses();
-		int adresseImRAM = seitenTabellenEintrag.realPageFrameAdr;
+		if (seitenTabellenEintrag != null) {
+			eventLog.incrementReadAccesses();
+			int adresseImRAM = seitenTabellenEintrag.realPageFrameAdr;
 
-		eventLog.incrementReadAccesses();
-		return readFromRAM(adresseImRAM);
+			eventLog.incrementReadAccesses();
+			return readFromRAM(adresseImRAM);
+		} else {
+			// seitenfehler
+			eventLog.incrementPageFaults();
+		}
+		
+		return -1;
 
 	}
 
