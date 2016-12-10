@@ -305,34 +305,26 @@ public class OperatingSystem {
      *         Zugriffsfehler
      */
     public synchronized int read(int pid, int virtAdr) {
-        PageTable pt = getProcess(pid).pageTable;
-        int pn = getVirtualPageNum(virtAdr);
-        PageTableEntry pte = pt.getPte(pn);
-        if (pte != null) {
+        PageTable pageTable = getProcess(pid).pageTable;
+        int pageNum = getVirtualPageNum(virtAdr);
+        PageTableEntry pageTableEntry = pageTable.getPte(pageNum);
+        if (pageTableEntry != null) {
             eventLog.incrementReadAccesses(); // Statistik
-            if (pte.valid) {
-                // in Seitentabelle vorhanden
-                int ra = pte.realPageFrameAdr + getOffset(virtAdr);
-                pte.referenced = true;
-                testOut("OS: read " + readFromRAM(ra) + " +++ PID: " + pid + " in virt. Adresse "
-                    + virtAdr
-                    + " gelesen! RAM-Adresse: " + ra + " \n");
-                return readFromRAM(ra);
-            } else {
+            if (!pageTableEntry.valid) {
                 // noch nicht in Seitentabelle geladen
-                pte = handlePageFault(pte, pid);
-                int ra = pte.realPageFrameAdr + getOffset(virtAdr);
-                pte.referenced = true;
-                testOut("OS: read " + readFromRAM(ra) + " +++ PID: " + pid + " in virt. Adresse "
-                    + virtAdr
-                    + " gelesen! RAM-Adresse: " + ra + " \n");
-                return readFromRAM(ra);
+                pageTableEntry = handlePageFault(pageTableEntry, pid);
             }
+            // ab hier sicher in Seitentabelle vorhanden
+            int ra = pageTableEntry.realPageFrameAdr + getOffset(virtAdr);
+            pageTableEntry.referenced = true;
+            testOut("OS: read " + readFromRAM(ra) + " +++ PID: " + pid + " in virt. Adresse "
+                + virtAdr
+                + " gelesen! RAM-Adresse: " + ra + " \n");
+            return readFromRAM(ra);
         } else {
-            // Fehlerfall
+            // Fehlerfall pageTableTntry == null
             return -1;
         }
-        
     }
     
     // --------------- Private Methoden des Betriebssystems
@@ -564,6 +556,7 @@ public class OperatingSystem {
      * 
      * @param ramAdr
      */
+    @SuppressWarnings("unused") // keine Nutzung vom Prof gewünscht???
     private void freeRAMPage(int ramAdr) {
         // Algorithmus:
         // RAM-Seite mit Nullen �berschreiben (Security!) und neuen

@@ -160,11 +160,11 @@ public class PageTable {
      */
     private PageTableEntry randomAlgorithm(PageTableEntry newPte) {
         int index = ThreadLocalRandom.current().nextInt(0, pteRAMlist.size());
-        PageTableEntry pte = pteRAMlist.get(index);
+        PageTableEntry pageTableEntry = pteRAMlist.get(index);
         pteRAMlist.set(index, newPte);
         os.testOut("Prozess " + pid + ": Random-Algorithmus hat pte ausgew�hlt: "
-            + pte.virtPageNum);
-        return pte;
+            + pageTableEntry.virtPageNum);
+        return pageTableEntry;
     }
     
     // ----------------------- Hilfsmethode --------------------------------
