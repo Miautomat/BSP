@@ -378,6 +378,11 @@ public class OperatingSystem {
     }
     
     /**
+     * billiger: shiften statt dividieren/multiplizieren - pageSize muss dann
+     * aber 2^x sein
+     */
+    
+    /**
      * @param virtAdr
      *            : eine virtuelle Adresse
      * @return Den entsprechenden Offset zur Berechnung der realen Adresse

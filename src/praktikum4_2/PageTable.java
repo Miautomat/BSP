@@ -159,7 +159,7 @@ public class PageTable {
      * RANDOM-Algorithmus: Zuf�llige Auswahl
      */
     private PageTableEntry randomAlgorithm(PageTableEntry newPte) {
-        int index = new Random().nextInt(pteRAMlist.size() - 1);
+        int index = new Random().nextInt(pteRAMlist.size());
         PageTableEntry pageTableEntry = pteRAMlist.get(index);
         
         /*
